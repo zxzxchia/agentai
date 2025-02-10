@@ -1,0 +1,2 @@
+pandas
+google-genai==0.8.0
