@@ -1,0 +1,74 @@
+    CREATE TABLE customers (
+        customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        first_name VARCHAR,
+        last_name VARCHAR,
+        city VARCHAR,
+        mobile_no VARCHAR,
+        pancard_no VARCHAR,
+        dob VARCHAR,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP
+    );
+
+    CREATE TABLE branchs (
+        branch_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        branch_name VARCHAR,
+        branch_location VARCHAR,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP
+    );
+
+    CREATE TABLE accounts (
+        account_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        customer_id INTEGER,
+        balance INTEGER,
+        account_status VARCHAR,
+        account_type VARCHAR,
+        currency VARCHAR,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP,
+        FOREIGN KEY(customer_id) REFERENCES customers(customer_id)
+    );
+
+    CREATE TABLE transactions (
+        transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        transaction_type VARCHAR,
+        from_account_id INTEGER,
+        to_account_id INTEGER,
+        date_issued DATE,
+        amount INTEGER,
+        transaction_medium VARCHAR,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP,
+        FOREIGN KEY(from_account_id) REFERENCES accounts(account_id),
+        FOREIGN KEY(to_account_id) REFERENCES accounts(account_id)
+    );
+
+    CREATE TABLE loans (
+        loan_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        customer_id INTEGER,
+        branch_id INTEGER,
+        loan_amount INTEGER,
+        date_issued DATE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP,
+        FOREIGN KEY(customer_id) REFERENCES customers(customer_id),
+        FOREIGN KEY(branch_id) REFERENCES branchs(branch_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS metadata (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        entity_type TEXT, 
+        entity_name TEXT, 
+        property_name TEXT,
+       property_value TEXT
+    );
+
+    CREATE INDEX customers_index_0 ON customers (customer_id);
+    CREATE INDEX customers_index_1 ON customers (first_name);
+    CREATE INDEX customers_index_2 ON customers (last_name);
+    CREATE INDEX branchs_index_3 ON branchs (branch_id);
+    CREATE INDEX accounts_index_4 ON accounts (account_id);
+    CREATE INDEX transactions_index_5 ON transactions (from_account_id);
+    CREATE INDEX transactions_index_6 ON transactions (to_account_id);
+    CREATE INDEX transactions_index_7 ON transactions (from_account_id, to_account_id);
